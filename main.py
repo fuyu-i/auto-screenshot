@@ -15,8 +15,8 @@ def is_blurry(frame, threshold=100):
 
 def is_similar(frame1, frame2, threshold=5000):
     diff = cv2.absdiff(frame1, frame2)
-    gray_diff = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
-    return cv2.countNonZero(gray_diff) < threshold
+    mean_diff = diff.mean()
+    return mean_diff < threshold
 
 
 def ensure_dirs(base):
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument("--interval", type=float, default=1.0)
     parser.add_argument("--dark_thresh", type=float, default=40.0)
     parser.add_argument("--blur_thresh", type=float, default=100.0)
-    parser.add_argument("--sim_thresh", type=int, default=5999)
+    parser.add_argument("--sim_thresh", type=float, default=2.0)
 
     args = parser.parse_args()
 
