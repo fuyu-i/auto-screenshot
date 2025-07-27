@@ -3,17 +3,17 @@ import os
 import time
 import argparse
 
-def is_too_dark(frame, threshold=40):
+def is_too_dark(frame, threshold):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     return gray.mean() < threshold
 
 
-def is_blurry(frame, threshold=100):
+def is_blurry(frame, threshold):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     return cv2.Laplacian(gray, cv2.CV_64F).var() < threshold
 
 
-def is_similar(frame1, frame2, threshold=5000):
+def is_similar(frame1, frame2, threshold):
     diff = cv2.absdiff(frame1, frame2)
     mean_diff = diff.mean()
     return mean_diff < threshold
@@ -59,13 +59,13 @@ def main(args):
 
             save_path = None
 
-            if is_too_dark(frame):
+            if is_too_dark(frame, args.dark_thresh):
                 save_path = folders["dark"]
                 print("[Warning] - Skipped: Too dark")
-            elif is_blurry(frame):
+            elif is_blurry(frame, args.blur_thresh):
                 save_path = folders["blurry"]
                 print("[Warning] - Skipped: Blurry")
-            elif prev_frame is not None and is_similar(prev_frame, frame):
+            elif prev_frame is not None and is_similar(prev_frame, frame, args.sim_thresh):
                 save_path = folders["similar"]
                 print("[Warning] - Skipped: Similar to previous frame")
             else:
