@@ -75,7 +75,7 @@ def main(args):
         time.sleep(args.interval)
     
     cap.release()
-    
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Auto capture video frames")
@@ -84,8 +84,13 @@ if __name__ == "__main__":
     parser.add_argument("--interval", type=float, default=1.0)
     parser.add_argument("--dark_thresh", type=float, default=40.0)
     parser.add_argument("--blur_thresh", type=float, default=100.0)
-    parser.add_argument("--sim_+thresh", type=int, default=5999)
+    parser.add_argument("--sim_thresh", type=int, default=5999)
 
     args = parser.parse_args()
+
+    try:
+        args.source = int(args.source)
+    except ValueError:
+        pass
 
     main(args)
