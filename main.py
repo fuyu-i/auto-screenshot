@@ -85,7 +85,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Auto capture video frames")
     parser.add_argument("--output", type=str, default="output_frames")
-    parser.add_argument("--source", type=str, default="rtmp://localhost/live/stream")
+    parser.add_argument("--source", type=str, default="rtmp://127.0.0.1/live/test")
     parser.add_argument("--interval", type=float, default=1.0)
     parser.add_argument("--dark_thresh", type=float, default=40.0)
     parser.add_argument("--blur_thresh", type=float, default=100.0)
