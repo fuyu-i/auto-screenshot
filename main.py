@@ -44,6 +44,7 @@ def main(args):
     
     prev_frame = None
     frame_count = 0
+    last_timestamp = time.time()
 
     while True:
         ret, frame = cap.read()
@@ -51,28 +52,32 @@ def main(args):
             print("[Error] - Failed to read frame.")
             continue
 
-        save_path = None
 
-        if is_too_dark(frame):
-            save_path = folders["dark"]
-            print("[Warning] - Skipped: Too dark")
-        elif is_blurry(frame):
-            save_path = folders["blurry"]
-            print("[Warning] - Skipped: Blurry")
-        elif prev_frame is not None and is_similar(prev_frame, frame):
-            save_path = folders["similar"]
-            print("[Warning] - Skipped: Similar to previous frame")
-        else:
-            save_path = folders["valid"]
-            print("[Info] - Frame is valid")
-            prev_frame = frame.copy()
+        now = time.time()
+        if now - last_timestamp >= args.interval:
+            last_timestamp = now
 
-        filename = os.path.join(save_path, f"frmae_{frame_count:04}.jpg")
-        cv2.imwrite(filename, frame)
-        print(f"[Info] - Saved: {filename}")
+            save_path = None
 
-        frame_count += 1
-        time.sleep(args.interval)
+            if is_too_dark(frame):
+                save_path = folders["dark"]
+                print("[Warning] - Skipped: Too dark")
+            elif is_blurry(frame):
+                save_path = folders["blurry"]
+                print("[Warning] - Skipped: Blurry")
+            elif prev_frame is not None and is_similar(prev_frame, frame):
+                save_path = folders["similar"]
+                print("[Warning] - Skipped: Similar to previous frame")
+            else:
+                save_path = folders["valid"]
+                print("[Info] - Frame is valid")
+                prev_frame = frame.copy()
+
+            filename = os.path.join(save_path, f"frmae_{frame_count:04}.jpg")
+            cv2.imwrite(filename, frame)
+            print(f"[Info] - Saved: {filename}")
+
+            frame_count += 1
     
     cap.release()
 
