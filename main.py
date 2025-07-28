@@ -73,7 +73,8 @@ def main(args):
                 print("[Info] - Frame is valid")
                 prev_frame = frame.copy()
 
-            filename = os.path.join(save_path, f"frmae_{frame_count:04}.jpg")
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            filename = os.path.join(save_path, f"frame_{timestamp}_{frame_count:04}.jpg")
             cv2.imwrite(filename, frame)
             print(f"[Info] - Saved: {filename}")
 
